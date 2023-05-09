@@ -1,0 +1,48 @@
+@import "variables";
+
+body{
+  font-family: 'Noto Sans TC', sans-serif;
+  background-color: black;
+  color: white;
+}
+
+.bg-black{
+  background-color: black !important;
+}
+
+.btn-white{
+  border: 0;
+  &:hover{
+    background: $light;
+    transition: all 0.5s;
+  }
+  &.active{
+    background: $light;
+  }
+}
+
+.link-white{
+  color: white;
+  &:hover{
+    color: #ffffffc4;
+    transition: all 0.5s;
+  }
+}
+
+.page{
+
+  .page-link{
+    background-color: #fff;
+    color: #000;  
+  }
+  &.active .page-link{
+    background: #000;
+    color: #fff;
+    transition: all 0.5s;
+  }
+  &:hover .page-link{
+    background: $light;
+    transition: all 0.5s;
+  }
+}
+
