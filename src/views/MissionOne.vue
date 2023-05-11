@@ -16,7 +16,7 @@
               </div>
               <div class="card-body">
                 <h4 class="h5 fw-bold mb-2">{{ api.title }}</h4>
-                <p>{{ api.description }}</p>
+                <p class="text-black-80">{{ api.description }}</p>
               </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between py-3">
@@ -26,12 +26,7 @@
                 <li class="list-group-item d-flex justify-content-between py-3">
                   <p>{{ `#${api.category}` }}</p>
                   <a href="#">
-                    <img
-                      src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/icons/share.png?raw=true"
-                      alt="share"
-                      width="24"
-                      height="24"
-                    />
+                    <ShareIcon></ShareIcon>
                   </a>
                 </li>
               </ul>
@@ -44,7 +39,12 @@
 </template>
 
 <script>
+import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+
 export default {
+  components:{
+      ShareIcon
+    },
   data() {
     return {
       applicationsBox: {
