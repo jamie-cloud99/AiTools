@@ -163,7 +163,7 @@
 </template>
 
 <script>
-import SearchIcon from 'vue-material-design-icons/magnify.vue'
+import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 import FilterIcon from 'vue-material-design-icons/Filter.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'

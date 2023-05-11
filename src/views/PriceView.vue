@@ -114,7 +114,7 @@ import ApiList from '../components/ApiList.vue'
 import FooterComponent from '../components/FooterComponent.vue'
 
 import CallMadeIcon from 'vue-material-design-icons/CallMade.vue'
-import PlusIcon from 'vue-material-design-icons/PLus.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 
 export default {
