@@ -1,16 +1,12 @@
-.card{
-  border-radius: 16px
-  
-}
 
 .card-img-top{
   transition: all 0.5s ease-in-out;
-  &:hover{
+  &:hover, &:active{
     transform: scale(1.25);
     
   }
 }
 
 .list-group, .list-group-item:last-child{
-  border-radius: 0 0 16px 16px;
+  border-radius: 0 0 1rem 1rem;
 }

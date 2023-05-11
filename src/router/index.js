@@ -22,7 +22,11 @@ const router = createRouter({
       name: 'mission-one',
       component: () => import('../views/MissionOne.vue')
     }
-  ]
+  ],
+  linkActiveClass: 'active',
+  scrollBehavior() {
+    return { top: 0, behavior: 'smooth' }
+  }
 })
 
 export default router

@@ -5,25 +5,27 @@
       <div class="d-flex justify-content-between align-items-center">
         <h1>
           <span class="visually-hidden">AI工具王</span>
-          <a href="#" class="logo"
-            ><img class="logo-img" :src="logo.imgUrl" :alt="logo.name" width="245" height="40"
-          /></a>
+          <a href="#" class="logo">
+            <img class="logo-img" :src="logo.imgUrl" :alt="logo.name" width="245" height="40"
+          />
+          
+        </a>
         </h1>
         <div
           class="d-md-none nav-menu navbar-toggler"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
         >
-          <img src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/icons/menu.png?raw=true" alt="menu" width="24" height="24"/>
+          <MenuIcon></MenuIcon>
         </div>
       </div>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
         <ul class="d-md-flex text-center">
           <li class="menu-item">
-            <a href="#" class="link-white p-3">首頁</a>
+            <RouterLink class="link-white p-3" :to="{name: 'home'}" >首頁</RouterLink>
           </li>
           <li class="menu-item">
-            <a href="#" class="link-white p-3">定價</a>
+            <RouterLink class="link-white p-3" :to="{name: 'price'}">定價</RouterLink>
           </li>
         </ul>
       </div>
@@ -33,7 +35,12 @@
 
 
 <script>
+import MenuIcon from 'vue-material-design-icons/Menu.vue'
+
 export default {
+  components:{
+    MenuIcon
+  },
   data(){
     return{
       logo: {
@@ -55,9 +62,5 @@ export default {
   @include pad{
     height: 2.5rem;
   }
-}
-
-.navbar-collapse {
-  flex-grow: 0;
 }
 </style>

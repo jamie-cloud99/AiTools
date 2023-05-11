@@ -298,14 +298,21 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
+$black-20: #f2f2f2;
+$black-40: #D1D1D1;
+$black-60: #919191;
+$black-80: #525252;
+
 $primary:       $blue !default;
 $secondary:     $gray-600 !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        $red !default;
-$light:         #f2f2f2 !default;
+$light:         $black-20 !default;
 $dark:          $gray-900 !default;
+
+
 // scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map

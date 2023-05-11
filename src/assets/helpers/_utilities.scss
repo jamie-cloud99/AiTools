@@ -1,3 +1,4 @@
+// margin
 
 .mt-xl, .my-xl{
   margin-top: 7.5rem;
@@ -42,6 +43,7 @@
   }
 }
 
+// padding
 
 .pt-xl, .py-xl{
   padding-top: 7.5rem;
@@ -71,17 +73,62 @@
   }
 }
 
+.pt-md, .py-md{
+  padding-top: 1.25rem;
+  @include pad{
+    padding-top: 2.5rem;
+  }
+}
+
+.pb-md, .py-md{
+  padding-bottom: 1.25rem;
+  @include pad{
+    padding-bottom: 2.5rem;
+  }
+}
+
+.ps-md, .px-md{
+  padding-left: 1.25rem;
+  @include pad{
+    padding-left: 2.5rem;
+  }
+}
+
+.pe-md, .px-md{
+  padding-right: 1.25rem;
+  @include pad{
+    padding-right: 2.5rem;
+  }
+}
+
+.p-md{
+  padding: 1.25rem;
+  @include pad{
+    padding: 2.5rem;
+  }
+}
+
+// font-size
+
+.fs-xs{
+  font-size: 12px;
+}
+
 .fs-sm{
   font-size: 14px;
 }
 
-.rounded-4, .btn{
+// border-rounded
+
+.rounded-4, .btn, .card{
   border-radius: 1rem;
 }
 
 .rounded-5{
   border-radius: 1.25rem;
 }
+
+// icon size
 
 .icon-lg{
   width: 80px;
@@ -96,4 +143,10 @@
 .icon-sm{
   width: 16px;
   height: auto;
+}
+
+// style
+
+.list-disc{
+  list-style: disc;
 }

@@ -41,7 +41,7 @@
 
     <div class="partners">
       <h2 class="mb-lg">來自合作夥伴</h2>
-      <div class="partner-list mb-xl text-nowrap overflow-auto">
+      <div class="partner-list mb-xl text-nowrap">
         <span v-for="i in partnersCount" :key="i">
           <img
             class="partner-logo"
@@ -106,15 +106,10 @@
         <Swiper class="mySwiper" :pagination="true" :modules="modules" :slides-per-view="slidesPerView">
           <SwiperSlide class="col-md-4" v-for="review in reviews" :key="review.id">
             <div class="card bg-dark text-white h-100">
-              <div class="card-body d-flex flex-column">
+              <div class="card-body d-flex flex-column p-md">
                 <p class="mb-3">
                   <span v-for="i in review.starsCount" :key="i">
-                    <img
-                      src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/icons/star.png"
-                      alt="review stars"
-                      width="16"
-                      height="16"
-                    />
+                    <StarIcon :size="16"></StarIcon>
                   </span>
                 </p>
                 <p class="mb-5">{{ review.content }}</p>
@@ -146,7 +141,7 @@
     <div class="text-center border-bottom border-light pb-xl mb-5">
       <h3 class="mb-4 fw-bold">現在就來建立屬於你的服務吧</h3>
       <button class="btn btn-outline-light fs-5 fw-bold px-4">開始使用 
-        <img class="icon-md align-middle ms-2" src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/icons/call%20made.png" alt="start arrow">
+        <CallMadeIcon class="ms-2"></CallMadeIcon>
       </button>
     </div>
 
@@ -190,6 +185,7 @@
 
 .partner-list{
   text-align: left;
+  overflow: hidden;
   @include pad{
     text-align: center;
   }
@@ -217,13 +213,18 @@ import Navigation from '../components/NavigationComponent.vue';
 import FooterComponent from '../components/FooterComponent.vue';
 import ApiList from '../components/ApiList.vue';
 
+import StarIcon from 'vue-material-design-icons/Star.vue'
+import CallMadeIcon from 'vue-material-design-icons/CallMade.vue'
+
 export default {
   components: {
     Swiper,
     SwiperSlide,
     Navigation,
     FooterComponent,
-    ApiList
+    ApiList,
+    StarIcon,
+    CallMadeIcon
   },
 
   data() {

@@ -10,22 +10,48 @@ body{
   background-color: black !important;
 }
 
+.text-black-80{
+  color: $black-80 !important;
+}
+
+.text-black-60{
+  color: $black-60 !important;
+}
+
+.text-black-40{
+  color: $black-40 !important;
+}
+
+.text-black-20{
+  color: $black-20 !important;
+}
+
+.border-light{
+  border-color: $black-80 !important;
+}
+
+.border-black-20{
+  border-color: $black-20;
+}
+
 .btn-white{
+  color: $black-60; 
   border: 0;
-  &:hover{
-    background: $light;
-    transition: all 0.5s;
+  transition: all 0.5s;
+  &:hover, &:active, &:focus{
+    color: $black-60 !important;
   }
   &.active{
-    background: $light;
+    background: $light !important;  
+    color: #000;
   }
 }
 
 .link-white{
   color: white;
-  &:hover{
-    color: #ffffffc4;
-    transition: all 0.5s;
+  transition: all 0.5s;
+  &:hover, &:active{
+    color: $black-60;   
   }
 }
 
@@ -45,4 +71,46 @@ body{
     transition: all 0.5s;
   }
 }
+
+
+.dropdown-item {
+  position: relative;
+  transition: all 0.5s;
+  &:hover, &:focus{
+    background-color: $light;
+    color: #000;
+  }
+  
+  &:active, &.active{
+    background-color: white;
+    color: #000;
+    &::after{
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-image: url(https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/icons/check.png?raw=true);
+      z-index: 20;
+      top: 0.5rem;
+      right: 1.5rem;
+    }
+  }
+}
+
+.accordion-button{
+  background-color: #000;
+  color: #fff;
+  border-color: $black-80;
+  
+  &.collapsed, &:not(.collapsed), &:focus{
+    background-color: #000;
+    color: #fff;
+    border-color: $black-80;
+    box-shadow: 0 0;
+    &::after{
+      display: none;
+    }
+  }
+}
+
 
