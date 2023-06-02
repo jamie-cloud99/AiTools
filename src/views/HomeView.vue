@@ -6,14 +6,10 @@
       <h2 class="display-2 fw-bolder mb-4">
         透過<br />AI工具王的<br />強大模型<br />讓您的業務更聰明
       </h2>
-      <button class="btn btn-outline-light fs-5 fw-bold px-4 py-2 mb-5">
-        開始使用
-        
-      </button>
-      <div class="text-end mb-xl">
-        <span v-for="i in 3" :key="i">
-          <img class="banner-animation grass-icon" src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/deco.png" alt="grass" width="160" height="160"/>
-        </span>
+      <button class="btn btn-outline-light fs-5 fw-bold px-4 py-2 mb-5">開始使用</button>
+
+      <div class="animation-group d-flex flex-row-reverse overflow-hidden mb-xl">
+        <GrassAnimation></GrassAnimation>
       </div>
     </div>
 
@@ -26,84 +22,98 @@
     </div>
 
     <div class="card-list overflow-hidden mb-xl">
-      <div class="row gy-3">
-        <div class="col-md-4" v-for="feature in features" :key="feature.title">
+      <ul class="row gy-3">
+        <li class="col-md-4" v-for="feature in features" :key="feature.title">
           <div class="card text-white bg-black border-light h-100">
             <div class="card-body py-lg">
-              <img class="icon-lg mb-3" :src="feature.iconUrl" :alt="feature.title" width="80" height="80" />
+              <img
+                class="icon-lg mb-3"
+                :src="feature.iconUrl"
+                :alt="feature.title"
+                width="80"
+                height="80"
+              />
               <h4 class="h5 fw-bold mb-3">{{ feature.title }}</h4>
               <p>{{ feature.content }}</p>
             </div>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
 
     <div class="partners">
       <h2 class="mb-lg">來自合作夥伴</h2>
       <div class="partner-list mb-xl text-nowrap">
-        <span v-for="i in partnersCount" :key="i">
+        <div class="partner-list-row overflow-auto scrollbar-hidden">
+          <span v-for="i in partnersCount" :key="i">
+            <img
+              class="partner-logo"
+              :src="`https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise${i}.png?raw=true`"
+              :alt="'合作企業' + i"
+              width="160"
+              height="40"
+            />
+          </span>
+        </div>
+        <div class="partner-list-row overflow-auto scrollbar-hidden">
           <img
             class="partner-logo"
-            :src="`https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise${i}.png?raw=true`"
-            :alt="'合作企業' + i"
+            src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise7.png?raw=true"
+            alt="合作企業7"
             width="160"
             height="40"
           />
-        </span>
-        <br>
-        <img
-          class="partner-logo"
-          src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise7.png?raw=true"
-          alt="合作企業7"
-          width="160"
-          height="40"
-        />
-        <span v-for="i in 2" :key="i">
+          <span v-for="i in 2" :key="i">
+            <img
+              class="partner-logo"
+              :src="`https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise${
+                i + partnersCount + 1
+              }.png?raw=true`"
+              :alt="`合作企業${i + partnersCount + 1}`"
+              width="160"
+              height="40"
+            />
+          </span>
           <img
             class="partner-logo"
-            :src="`https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise${
-              i + partnersCount + 1
-            }.png?raw=true`"
-            :alt="`合作企業${i + partnersCount +1}`"
+            src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise5.png?raw=true"
+            alt="合作企業5"
             width="160"
             height="40"
           />
-        </span>
-        <img
-          class="partner-logo"
-          src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise5.png?raw=true"
-          alt="合作企業5"
-          width="160"
-          height="40"
-        />
-        <img
-          class="partner-logo"
-          src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise11.png?raw=true"
-          alt="合作企業11"
-          width="160"
-          height="40"
-        />
-        <img
-          class="partner-logo"
-          src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise12.png?raw=true"
-          alt="合作企業12"
-          width="160"
-          height="40"
-        />
-        <img
-          class="partner-logo"
-          src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise7.png?raw=true"
-          alt="合作企業7"
-          width="160"
-          height="40"
-        />
+          <img
+            class="partner-logo"
+            src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise11.png?raw=true"
+            alt="合作企業11"
+            width="160"
+            height="40"
+          />
+          <img
+            class="partner-logo"
+            src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise12.png?raw=true"
+            alt="合作企業12"
+            width="160"
+            height="40"
+          />
+          <img
+            class="partner-logo"
+            src="https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/enterprise7.png?raw=true"
+            alt="合作企業7"
+            width="160"
+            height="40"
+          />
+        </div>
       </div>
     </div>
 
     <div class="card-list mb-xl">
       <div class="row">
-        <Swiper class="mySwiper" :pagination="true" :modules="modules" :slides-per-view="slidesPerView">
+        <Swiper
+          class="mySwiper"
+          :pagination="true"
+          :modules="modules"
+          :slides-per-view="slidesPerView"
+        >
           <SwiperSlide class="col-md-4" v-for="review in reviews" :key="review.id">
             <div class="card bg-dark text-white h-100">
               <div class="card-body d-flex flex-column p-md">
@@ -138,56 +148,100 @@
   <ApiList></ApiList>
 
   <div class="container pt-xl">
-    <div class="text-center border-bottom border-light pb-xl mb-5">
+    <div class="text-center border-bottom border-light pb-xl">
       <h3 class="mb-4 fw-bold">現在就來建立屬於你的服務吧</h3>
-      <button class="btn btn-outline-light fs-5 fw-bold px-4">開始使用 
+      <button class="btn btn-outline-light fs-5 fw-bold px-4">
+        開始使用
         <CallMadeIcon class="ms-2"></CallMadeIcon>
       </button>
     </div>
 
     <FooterComponent></FooterComponent>
+    <ScrollToTop></ScrollToTop>
   </div>
 </template>
 
 <style lang="scss">
-
-.swiper{
-  overflow-x: clip;
-  overflow-y: visible;
+.banner {
+  margin-top: 2.5rem;
 }
 
-.swiper-slide{
-  padding: 0 0.5rem;
-}
-
-.swiper-horizontal>.swiper-pagination-bullets{
-  bottom: -30px
-
-}
-
-.swiper-pagination-bullet{
-  background-color: #ffffffd1;
-}
-
-.swiper-pagination-bullet-active{
-  background-color: #fff;
-}
-
-
-
-.grass-icon{
+.animation-group {
   height: 117px;
-  width: auto;
-  @include pad{
+  @include pad {
     height: 160px;
   }
 }
 
-.partner-list{
+.swiper {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.swiper-slide {
+  padding: 0 0.5rem;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets {
+  bottom: -30px;
+}
+
+.swiper-pagination-bullet {
+  background-color: #ffffffd1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #fff;
+}
+
+.partner-list {
+  position: relative;
   text-align: left;
-  overflow: hidden;
-  @include pad{
+
+  @include pad {
     text-align: center;
+  }
+  
+}
+
+.partner-list-row{
+  &:first-child{
+    &::before {
+      content: '';
+      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
+      width: 6rem;
+      height: 2.5rem;
+      position: absolute;
+      left: -1px;
+    }
+    &::after {
+      content: '';
+      background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
+      width: 6rem;
+      height: 2.5rem;
+      position: absolute;
+      right: -1px;
+    }
+  }
+  &:last-child{
+    &::before {
+      content: '';
+      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.8), rgba(0,0,0,0));
+      width: 5rem;
+      height: 3rem;
+      position: absolute;
+      left: -1px;
+      bottom: calc(1px + 1.5rem)
+    }
+    &::after {
+      content: '';
+      background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
+      width: 5rem;
+      height: 3rem;
+      position: absolute;
+      right: -1px;
+      bottom: calc(1px + 1.5rem)
+    }
   }
 }
 
@@ -196,22 +250,22 @@
   width: auto;
   margin: 0 1rem 1.5rem;
 }
-
-
 </style>
 
 <script>
- // Import Swiper Vue.js components
- import { Swiper, SwiperSlide } from 'swiper/vue';
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue'
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
+import 'swiper/css'
+import 'swiper/css/pagination'
 // import required modules
-import { Pagination } from 'swiper';
+import { Pagination } from 'swiper'
 
-import Navigation from '../components/NavigationComponent.vue';
-import FooterComponent from '../components/FooterComponent.vue';
-import ApiList from '../components/ApiList.vue';
+import Navigation from '../components/NavigationComponent.vue'
+import FooterComponent from '../components/FooterComponent.vue'
+import ApiList from '../components/ApiList.vue'
+import GrassAnimation from '../components/GrassAnimation.vue'
+import ScrollToTop from '../components/ScrollToTop.vue'
 
 import StarIcon from 'vue-material-design-icons/Star.vue'
 import CallMadeIcon from 'vue-material-design-icons/CallMade.vue'
@@ -224,12 +278,33 @@ export default {
     FooterComponent,
     ApiList,
     StarIcon,
-    CallMadeIcon
+    CallMadeIcon,
+    GrassAnimation,
+    ScrollToTop
   },
 
   data() {
     return {
-      
+      grassImages: [
+        {
+          id: 1,
+          imgUrl:
+            'https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/deco.png',
+          isShow: false
+        },
+        {
+          id: 2,
+          imgUrl:
+            'https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/deco.png',
+          isShow: false
+        },
+        {
+          id: 3,
+          imgUrl:
+            'https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/deco.png',
+          isShow: false
+        }
+      ],
       features: [
         {
           iconUrl:
@@ -283,30 +358,29 @@ export default {
             '我們銀行一直在尋找能夠幫助我們提高風險控制和客戶服務的解決方案，而 AI工具王 提供的 AI 模型租賃服務正好滿足了我們的需求。我們使用 AI工具王 的模型進行客戶信用評估和詐騙檢測等任務，這些模型非常準確，能夠幫助我們更好地控制風險，提高客戶滿意度。非常感謝 AI工具王 團隊的支持！'
         }
       ],
-      
+
       modules: [Pagination],
       screenWidth: 1000
     }
   },
-  computed:{
-    slidesPerView(){
+  computed: {
+    slidesPerView() {
       const minPadWidth = 768
-      if(this.screenWidth>=minPadWidth){
+      if (this.screenWidth >= minPadWidth) {
         return 3
-      } else{
+      } else {
         return 1
       }
-    } 
- },
- methods: {
-  getScreenWidth() {
-    this.screenWidth = window.innerWidth
-  }
- },
- mounted() {
+    }
+  },
+  methods: {
+    getScreenWidth() {
+      this.screenWidth = window.innerWidth
+    }
+  },
+  mounted() {
     this.getScreenWidth()
     window.addEventListener('resize', this.getScreenWidth)
-  },
-  
+  }
 }
 </script>

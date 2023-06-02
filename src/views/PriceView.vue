@@ -12,23 +12,16 @@
           <p class="h1 fw-bold">我們相信，最靈活的取用機制，才能最大化的幫助你業務的推動。</p>
         </div>
       </div>
-      <div class="mb-xl">
-        <span v-for="i in 3" :key="i">
-          <img
-            class="banner-animation grass-icon"
-            src="https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/deco.png"
-            alt="grass"
-            width="160"
-            height="160"
-          />
-        </span>
+
+      <div class="animation-group d-flex overflow-hidden mb-xl">
+        <GrassAnimation></GrassAnimation>
       </div>
     </div>
 
     <div class="card-list overflow-hidden mb-xl">
         <h3 class="fw-bold mb-lg">定價</h3>
-        <div class="row gy-3">
-          <div class="col-md-6" v-for="plan in priceingPlans" :key="plan.id">
+        <ul class="row gy-3">
+          <li class="col-md-6" v-for="plan in priceingPlans" :key="plan.id">
             <div class="card text-white bg-black border-light h-100">
               <div class="card-body pb-lg">
                 <h4 class="h3 fw-bold mb-3">{{ plan.name }}</h4>
@@ -46,8 +39,8 @@
                 </p>
               </div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
 
       <div class="row mb-xl">
@@ -75,7 +68,7 @@
         </div>
         <div class="col-md-8">
           <div class="accordion rounded-4 " id="faqAccordion">
-            <div class="accordion-item rounded-4 border border-light overflow-hidden mb-3" v-for="item in faq" :key="item.id">
+            <div class="accordion-item rounded-4 overflow-hidden mb-3" :class="{active: isQuestionSelected(item.id)}" v-for="item in faq" :key="item.id">
               <h4 class="accordion-header" :id="`heading${item.id}`">
                 <button
                   class="accordion-button"
@@ -105,6 +98,7 @@
       </div>
     </div>
     <FooterComponent></FooterComponent>
+    <ScrollToTop></ScrollToTop>
   </div>
 </template>
 
@@ -112,6 +106,8 @@
 import Navigation from '../components/NavigationComponent.vue'
 import ApiList from '../components/ApiList.vue'
 import FooterComponent from '../components/FooterComponent.vue'
+import GrassAnimation from '../components/GrassAnimation.vue'
+import ScrollToTop from '../components/ScrollToTop.vue'
 
 import CallMadeIcon from 'vue-material-design-icons/CallMade.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
@@ -124,7 +120,9 @@ export default {
     FooterComponent,
     CallMadeIcon,
     PlusIcon,
-    MinusIcon
+    MinusIcon,
+    GrassAnimation,
+    ScrollToTop
   },
   data() {
     return {
@@ -176,28 +174,28 @@ export default {
           id: 1,
           question: '如何選擇適合的AI模型？',
           answer:
-            '選擇適合的AI模型需要考慮問題的性質、數據的特徵、計算資源和預算等因素。明確定義問題，評估數據資源和可用計算資源，了解模型的複雜性和架構，考慮使用預訓練模型和開源庫，並進行模型的評估和測試。綜合這些因素，選擇最適合的模型能夠提高準確度和效能，並解決您的問題。'
+            '選擇適合的 AI 模型需要考慮您的應用場景、需要解決的問題、可用的資源以及預算等因素。可以通過對比不同模型的性能、準確率、速度等指標，以及與其他用戶的評價與反饋，來選擇最適合的模型。'
         },
         {
           id: 2,
           question: '租用模型的費用是如何計算的？',
           answer:
-            '琪琪模型：每小時 $10 美元，每月 $100 美元。昊昊模型：每小時 $20 美元，每月 $200 美元。卡卡模型：每小時 $50 美元，每月 $500 美元。杰杰模型：客制方案需洽詢顧問。'
+            '租用模型的費用通常會根據模型的性能和使用時間等因素進行計算。具體而言，模型的性能可以根據其精度、速度、暫用資源等指標來評估；而使用時間可以根據租用時間的長短來計算，通常會按小時、天或月來計算。綜合考慮這些因素，系統會自動算出對應的租用費用。'
         },
         {
           id: 3,
           question: '如何進行付款？',
-          answer: '我們有單次支付與每月訂閱兩種方式，可使用信用卡或線上轉帳付款。'
+          answer: '付款方式可以通過網站上提供的線上支付平台進行支付。具體而言，您可以選擇信用卡、銀行轉帳電子錢包等不同的支付方式進行支付。在支付前，您需要先登錄網站並選擇適合的租用方案，系統會自動計算出對應的租用欸用和支付金額，然後您可以選擇適合的支付方式進行支付。完成支付後，系統會自動向您提供相應的服務。'
         },
         {
           id: 4,
           question: '租用模型的期限是多久？',
-          answer: '我們以一個月為單位向您收費。'
+          answer: '租用模型的期限可以根據您的需求進行設置，通常可以選擇幾個小時、幾天或幾個月等不同的時間段。'
         },
         {
           id: 5,
           question: '如果在使用過程中遇到問題，應該怎麼處理？',
-          answer: '請洽客服電話：02-23453456，或諮詢粉絲頁線上客服。'
+          answer: '如果在使用過程中遇到問題，您可以聯繫客服或技術支持人員進行諮詢或報告問題。您也可以通過網站上的幫助中心或社區論壇尋找相關的解決方案和回答。'
         }
       ],
       questionSelectedId: null

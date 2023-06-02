@@ -15,12 +15,14 @@
           class="d-md-none nav-menu navbar-toggler"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          @click="toggleMenu"
         >
-          <MenuIcon></MenuIcon>
+          <MenuIcon v-if="!isOpen"></MenuIcon>
+          <CloseIcon v-else></CloseIcon>
         </div>
       </div>
       <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
-        <ul class="d-md-flex text-center">
+        <ul class="d-md-flex text-center" :class="{'menu-list-mb': isOpen}">
           <li class="menu-item">
             <RouterLink class="link-white p-3" :to="{name: 'home'}" >首頁</RouterLink>
           </li>
@@ -28,6 +30,9 @@
             <RouterLink class="link-white p-3" :to="{name: 'price'}">定價</RouterLink>
           </li>
         </ul>
+        <div class="menu-footer-mb" v-show="isOpen">
+          <FooterLink></FooterLink>
+        </div>        
       </div>
     </nav>
 
@@ -35,11 +40,16 @@
 
 
 <script>
+import FooterLink from './FooterLink.vue';
+
 import MenuIcon from 'vue-material-design-icons/Menu.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
 
 export default {
   components:{
-    MenuIcon
+    MenuIcon,
+    FooterLink,
+    CloseIcon
   },
   data(){
     return{
@@ -48,6 +58,12 @@ export default {
         imgUrl:
           'https://raw.githubusercontent.com/hexschool/2022-web-layout-training/main/2023web-camp/logo.png'
       },
+      isOpen: false
+    }
+  },
+  methods:{
+    toggleMenu(){
+      this.isOpen = !this.isOpen
     }
   }
 }
@@ -61,6 +77,25 @@ export default {
   width: auto;
   @include pad{
     height: 2.5rem;
+  }
+}
+
+.menu-list-mb{
+  transition: all 1s;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .menu-item{
+    font-size: 5rem;
+    font-weight: bold;
+    line-height: 1;
+  }
+}
+
+.menu-footer-mb{
+  @include pad{
+    display: none;
   }
 }
 </style>

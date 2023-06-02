@@ -12,7 +12,7 @@
         />
         <label for="formId1" class="text-muted ps-md-4">
           <span class="me-2">
-           <SearchIcon :size="16"></SearchIcon>
+            <SearchIcon :size="16"></SearchIcon>
           </span>
           請輸入搜尋關鍵字
         </label>
@@ -34,7 +34,7 @@
               <p class="fs-xs fw-bold text-black-60 px-3 my-2">{{ filter.select }}</p>
               <ul class="list-group">
                 <li class="list-item" v-for="item in filter.options" :key="item">
-                  <button type="button" class="dropdown-item" @click="filterTools(item, filter.select)" :class="{active: filtersSelected.some(value => value.filter===item && value.category === filter.select)}">{{ item }}</button>
+                  <button type="button" class="dropdown-item" @click="filterTools(item, filter.select)" :class="{active: filtersSelected.some(value => value.filter===item && value.category === filter.select) }">{{ item }}</button>
                 </li>
                 <li v-show="filter.id === 1" class="split-line border-bottom border-black-20 rounded-0"></li>
               </ul>
@@ -42,7 +42,7 @@
           </ul>
         </div>
 
-        <ul class="d-none d-md-flex align-items-center overflow-auto">
+        <ul class="d-none d-md-flex align-items-center overflow-auto scrollbar-hidden">
           <li class="mx-1" v-for="item in applicationsBox.category" :key="item">
             <button
               class="btn btn-white text-nowrap"
@@ -94,25 +94,27 @@
           </ul>
         </div>
       </div>
-
-      <ul class="d-flex d-md-none overflow-auto mb-5">
-        <li class="mx-1" v-for="item in applicationsBox.category" :key="item">
-          <button
-            class="btn btn-white text-nowrap"
-            :class="{ active: applicationsBox.categorySelected === item }"
-          >
-            {{ item }}
-          </button>
-        </li>
-      </ul>
+      
+      <div class="tool-nav-scrollbar  mb-5">
+        <ul class="nav d-flex d-md-none flex-nowrap overflow-auto scrollbar-hidden">
+          <li class="mx-1" v-for="item in applicationsBox.category" :key="item">
+            <button
+              class="btn btn-white text-nowrap"
+              :class="{ active: applicationsBox.categorySelected === item }"
+            >
+              {{ item }}
+            </button>
+          </li>
+        </ul>
+      </div>     
 
       <div class="card-list overflow-hidden mb-4">
-        <div class="row gy-3">
-          <div class="col-md-6 col-lg-4" v-for="api in applicationsBox.apis" :key="api.id">
+        <ul class="row gy-3">
+          <li class="col-md-6 col-lg-4" v-for="api in tempApplicationsBox.apis" :key="api.id">
             <div class="card overflow-hidden h-100">
               <div class="overflow-hidden">
                 <img
-                  class="card-img-top"
+                  class="card-img-top d-block"
                   :src="api.imgUrl"
                   :alt="api.title"
                   width="416"
@@ -130,14 +132,12 @@
                 </li>
                 <li class="list-group-item d-flex justify-content-between py-3">
                   <p>{{ `#${api.category}` }}</p>
-                  <a href="#">
-                    <ShareIcon></ShareIcon>
-                  </a>
+                  <a href="#" @click.prevent><ShareIcon></ShareIcon></a>
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
       <nav>
         <ul class="d-flex pages">
@@ -147,8 +147,8 @@
             :key="i"
             :class="{ active: pagination.currentPage === i }"
           >
-            <a href="#" class="page-link border-0 fs-sm">
-              <span class="align-middle">{{ i }}</span>
+            <a href="#" class="page-link border-0 fs-sm" @click.prevent>
+              <span class="">{{ i }}</span>
             </a>
           </li>
           <li class="page">
@@ -192,6 +192,7 @@ export default {
       sort: ['由新到舊', '由舊到新'],
       filtersSelected: [],
       isFromNew: true,
+      tempApplicationsBox: {},
       applicationsBox: {
         category: ['全部', '聊天', '影像辨識', '翻譯', '行銷', '客服', '生產力'],
         categorySelected: '全部',
@@ -272,7 +273,7 @@ export default {
         const index = this.filtersSelected.indexOf(newFilter)
         this.filtersSelected.splice(index, 1)
 
-        console.log(1)
+
         if (category === '類型') {
           this.applicationsBox.categorySelected = '全部'
         } else {
@@ -284,7 +285,6 @@ export default {
         this.filtersSelected.splice(index, 1)
         this.filtersSelected.push(newFilter)
 
-        console.log(2)
         if(category === '類型'){
           this.applicationsBox.categorySelected = filter
         } else {
@@ -294,8 +294,6 @@ export default {
       } else {
         this.filtersSelected.push(newFilter)
 
-        console.log(3)
-        console.log(category, filter)
         if(category === '類型'){
           this.applicationsBox.categorySelected = filter
         } else {
@@ -310,9 +308,36 @@ export default {
         this.applicationsBox.categorySelected = '全部'
         this.applicationsBox.modelSelected = '全部'
       }
-    }
+
+      this.showTool(this.applicationsBox)
+    },
+    showTool(applicationsBox){
+      // [], [m, c]
+      if(applicationsBox.modelSelected === "全部") {
+        if(applicationsBox.categorySelected === "全部") {
+          this.tempApplicationsBox.apis = [...applicationsBox.apis]
+        } else{
+          let filterApis = applicationsBox.apis.filter(value => value.category === applicationsBox.categorySelected)
+          this.tempApplicationsBox.apis = filterApis
+        }
+      } else {
+        let filterApis = applicationsBox.apis.filter(value => value.model === applicationsBox.modelSelected)
+        this.tempApplicationsBox.apis = filterApis
+        if(!applicationsBox.categorySelected === "全部") {
+          filterApis = this.tempApplicationsBox.apis.filter(value => value.category === applicationsBox.categorySelected)
+          this.tempApplicationsBox.apis = filterApis
+        }
+
+      }
+    },
+    
+
+
+    
   },
-  created() {}
+  created() {
+    this.showTool(this.applicationsBox)
+  }
 }
 </script>
 
@@ -327,6 +352,16 @@ export default {
   }
 }
 
+.tool-nav-scrollbar{
+  height: 36px;
+  overflow-y: hidden;
+}
+
+
+.split-line {
+  margin: 0.75rem 0 0.25rem;
+}
+
 .pages {
   justify-content: end;
 }
@@ -338,7 +373,4 @@ export default {
   }
 }
 
-.split-line {
-  margin: 0.75rem 0 0.25rem;
-}
 </style>

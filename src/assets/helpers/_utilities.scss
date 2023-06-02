@@ -150,3 +150,12 @@
 .list-disc{
   list-style: disc;
 }
+
+// scrollbar-hidden
+
+.scrollbar-hidden{
+  &::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+}
