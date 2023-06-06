@@ -4,11 +4,12 @@
       <h3 class="display-3 fw-bold mb-5">這些超酷的應用，都來自 AI工具王</h3>
       <div class="form-floating mb-4">
         <input
-          type="text"
-          class="form-control bg-light border-0 rounded-4"
+          type="search"
+          class="form-control bg-light border-0 rounded-4 px-5"
           name="formId1"
           id="formId1"
           placeholder="搜尋"
+          v-model="searchWords"
         />
         <label for="formId1" class="text-muted ps-md-4">
           <span class="me-2">
@@ -34,7 +35,7 @@
               <p class="fs-xs fw-bold text-black-60 px-3 my-2">{{ filter.select }}</p>
               <ul class="list-group">
                 <li class="list-item" v-for="item in filter.options" :key="item">
-                  <button type="button" class="dropdown-item" @click="filterTools(item, filter.select)" :class="{active: filtersSelected.some(value => value.filter===item && value.category === filter.select) }">{{ item }}</button>
+                  <button type="button" class="dropdown-item" @click="filterTools(item, filter.select)" :class="{active: filtersSelected.some(value => value.filter===item && value.type === filter.select) }">{{ item }}</button>
                 </li>
                 <li v-show="filter.id === 1" class="split-line border-bottom border-black-20 rounded-0"></li>
               </ul>
@@ -43,10 +44,10 @@
         </div>
 
         <ul class="d-none d-md-flex align-items-center overflow-auto scrollbar-hidden">
-          <li class="mx-1" v-for="item in applicationsBox.category" :key="item">
+          <li class="mx-1" v-for="item in applicationsBox.type" :key="item">
             <button
               class="btn btn-white text-nowrap"
-              :class="{ active: applicationsBox.categorySelected === item }"
+              :class="{ active: applicationsBox.typeSelected === item }"
             >
               {{ item }}
             </button>
@@ -94,70 +95,50 @@
           </ul>
         </div>
       </div>
-      
-      <div class="tool-nav-scrollbar  mb-5">
-        <ul class="nav d-flex d-md-none flex-nowrap overflow-auto scrollbar-hidden">
-          <li class="mx-1" v-for="item in applicationsBox.category" :key="item">
-            <button
-              class="btn btn-white text-nowrap"
-              :class="{ active: applicationsBox.categorySelected === item }"
-            >
-              {{ item }}
-            </button>
-          </li>
-        </ul>
-      </div>     
+
+      <ul class="d-flex d-md-none overflow-auto scrollbar-hidden mb-5">
+        <li class="mx-1" v-for="item in applicationsBox.type" :key="item">
+          <button
+            class="btn btn-white text-nowrap"
+            :class="{ active: applicationsBox.typeSelected === item }"
+          >
+            {{ item }}
+          </button>
+        </li>
+    </ul> 
 
       <div class="card-list overflow-hidden mb-4">
         <ul class="row gy-3">
-          <li class="col-md-6 col-lg-4" v-for="api in tempApplicationsBox.apis" :key="api.id">
+          <li class="col-md-6 col-lg-4" v-for="app in searchTools" :key="app.id">
             <div class="card overflow-hidden h-100">
               <div class="overflow-hidden">
                 <img
                   class="card-img-top d-block"
-                  :src="api.imgUrl"
-                  :alt="api.title"
+                  :src="app.imageUrl"
+                  :alt="app.title"
                   width="416"
                   height="312"
                 />
               </div>
               <div class="card-body">
-                <h4 class="h5 fw-bold mb-2">{{ api.title }}</h4>
-                <p class="text-black-80">{{ api.description }}</p>
+                <h4 class="h5 fw-bold mb-2">{{ app.title }}</h4>
+                <p class="text-black-80">{{ app.description }}</p>
               </div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between py-3">
                   <p class="fw-bold">AI 模型</p>
-                  <p class="ms-auto">{{ api.model }}</p>
+                  <p class="ms-auto">{{ app.model }}</p>
                 </li>
                 <li class="list-group-item d-flex justify-content-between py-3">
-                  <p>{{ `#${api.category}` }}</p>
-                  <a href="#" @click.prevent><ShareIcon></ShareIcon></a>
+                  <p>{{ `#${app.type}` }}</p>
+                  <a :href="app.link" target="_blank"><ShareIcon></ShareIcon></a>
                 </li>
               </ul>
             </div>
           </li>
         </ul>
       </div>
-      <nav>
-        <ul class="d-flex pages">
-          <li
-            class="page"
-            v-for="i in pagination.totalPages"
-            :key="i"
-            :class="{ active: pagination.currentPage === i }"
-          >
-            <a href="#" class="page-link border-0 fs-sm" @click.prevent>
-              <span class="">{{ i }}</span>
-            </a>
-          </li>
-          <li class="page">
-            <a href="#" class="page-link border-0 fs-sm">
-              <ChevronRightIcon :size="16"></ChevronRightIcon>
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <PaginationComponent :pagination="pagination" @change_page="changePage"></PaginationComponent>
     </div>
   </div>
 </template>
@@ -166,14 +147,14 @@
 import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 import FilterIcon from 'vue-material-design-icons/Filter.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
+import PaginationComponent from './PaginationComponent.vue'
 
 export default {
   components:{
     SearchIcon,
     FilterIcon,
     ShareIcon,
-    ChevronRightIcon
+    PaginationComponent
   },
   data() {
     return {
@@ -181,12 +162,12 @@ export default {
         {
           id: 1,
           select: 'AI 模型',
-          options: ['所有模型', '卡卡', '杰杰', '琪琪', '昊昊']
+          options: ['所有模型', 'gpt3.5']
         },
         {
           id: 2,
           select: '類型',
-          options: ['所有類型', '聊天', '影像辨識', '翻譯', '行銷', '客服', '生產力']
+          options: ['全部', '問答服務', '虛擬客服', '生活應用', '程式知識', '翻譯助手', '行銷文案']
         }
       ],
       sort: ['由新到舊', '由舊到新'],
@@ -194,99 +175,41 @@ export default {
       isFromNew: true,
       tempApplicationsBox: {},
       applicationsBox: {
-        category: ['全部', '聊天', '影像辨識', '翻譯', '行銷', '客服', '生產力'],
-        categorySelected: '全部',
+        type: ['全部', '問答服務', '虛擬客服', '生活應用', '程式知識', '翻譯助手', '行銷文案'],
+        typeSelected: '全部',
         modelSelected: '全部',
-        apis: [
-          {
-            id: 1,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool1.png?raw=true',
-            title: 'Chatbot Builder',
-            description: '建立智能化的聊天機器人，解答常見問題、提供客戶支援、收集反饋等。',
-            model: '卡卡',
-            category: '聊天'
-          },
-          {
-            id: 2,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool2.png?raw=true',
-            title: 'Image Recognition Platform',
-            description: '專業的圖像識別平台，識別圖像、分類、標記等。',
-            model: '杰杰',
-            category: '影像辨識'
-          },
-          {
-            id: 3,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool3.png?raw=true',
-            title: 'Language Translation API',
-            description: '專業的語言翻譯 API，實現文本翻譯功能，支援多種格式的文本。',
-            model: '琪琪',
-            category: '翻譯'
-          },
-          {
-            id: 4,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool4.png?raw=true',
-            title: 'Sentiment Analysis API',
-            description:
-              '自動識別文本中的情感傾向，包括正向、負向和中性等。適用於情感分析、社交媒體監控、市場調查等。',
-            model: '昊昊',
-            category: '行銷'
-          },
-          {
-            id: 5,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool5.png?raw=true',
-            title: 'Fraud Detection Platform',
-            description: '預防詐騙活動，適用於銀行、金融、電商等。',
-            model: '卡卡',
-            category: '客服'
-          },
-          {
-            id: 6,
-            imgUrl:
-              'https://github.com/hexschool/2022-web-layout-training/blob/main/2023web-camp/tool6.png?raw=true',
-            title: 'Voice Assistant SDK',
-            description:
-              '通過語音控制應用程式、設備，實現多種功能，例如播放音樂、查詢天氣、發送信息等。',
-            model: '杰杰',
-            category: '生產力'
-          }
-        ]
+        apps: []
       },
-      pagination: {
-        totalPages: 5,
-        currentPage: 1
-      }
+      pagination: { current_page: 1 },
+      searchWords: ''
     }
   },
   methods: {
     sortTools(isFromNew) {
       this.isFromNew = isFromNew
+      isFromNew ? this.tempApplicationsBox.apps.sort((a,b) => b.create_time - a.create_time) : this.tempApplicationsBox.apps.sort((a,b) => a.create_time - b.create_time)
     },
-    filterTools(filter, category) {
+    filterTools(filter, type) {
       // 多選filters  toggle
-      const newFilter = { filter, category }
-      if (this.filtersSelected.some(value=> value.category === category && value.filter === filter)) {
+      const newFilter = { filter, type }
+      if (this.filtersSelected.some(value=> value.type === type && value.filter === filter)) {
         const index = this.filtersSelected.indexOf(newFilter)
         this.filtersSelected.splice(index, 1)
 
 
-        if (category === '類型') {
-          this.applicationsBox.categorySelected = '全部'
+        if (type === '類型') {
+          this.applicationsBox.typeSelected = '全部'
         } else {
           this.applicationsBox.modelSelected = '全部'
         }
 
-      } else if (this.filtersSelected.some(value=> value.category.includes(category))) {
-        const index = this.filtersSelected.findIndex(value=> value.category.includes(category))
+      } else if (this.filtersSelected.some(value=> value.type.includes(type))) {
+        const index = this.filtersSelected.findIndex(value=> value.type.includes(type))
         this.filtersSelected.splice(index, 1)
         this.filtersSelected.push(newFilter)
 
-        if(category === '類型'){
-          this.applicationsBox.categorySelected = filter
+        if(type === '類型'){
+          this.applicationsBox.typeSelected = filter
         } else {
           this.applicationsBox.modelSelected = filter
         }
@@ -294,18 +217,18 @@ export default {
       } else {
         this.filtersSelected.push(newFilter)
 
-        if(category === '類型'){
-          this.applicationsBox.categorySelected = filter
+        if(type === '類型'){
+          this.applicationsBox.typeSelected = filter
         } else {
           this.applicationsBox.modelSelected = filter
         }
       }
 
-      this.applicationsBox.categorySelected = this.applicationsBox.categorySelected.replace('所有類型', '全部')
+      this.applicationsBox.typeSelected = this.applicationsBox.typeSelected.replace('所有類型', '全部')
       this.applicationsBox.modelSelected = this.applicationsBox.modelSelected.replace('所有模型', '全部')
 
       if (this.filtersSelected.length === 0) {
-        this.applicationsBox.categorySelected = '全部'
+        this.applicationsBox.typeSelected = '全部'
         this.applicationsBox.modelSelected = '全部'
       }
 
@@ -314,29 +237,55 @@ export default {
     showTool(applicationsBox){
       // [], [m, c]
       if(applicationsBox.modelSelected === "全部") {
-        if(applicationsBox.categorySelected === "全部") {
-          this.tempApplicationsBox.apis = [...applicationsBox.apis]
+        if(applicationsBox.typeSelected === "全部") {
+          this.tempApplicationsBox.apps = [...applicationsBox.apps]
         } else{
-          let filterApis = applicationsBox.apis.filter(value => value.category === applicationsBox.categorySelected)
-          this.tempApplicationsBox.apis = filterApis
+          let filterApps = applicationsBox.apps.filter(value => value.type === applicationsBox.typeSelected)
+          this.tempApplicationsBox.apps = filterApps
         }
       } else {
-        let filterApis = applicationsBox.apis.filter(value => value.model === applicationsBox.modelSelected)
-        this.tempApplicationsBox.apis = filterApis
-        if(!applicationsBox.categorySelected === "全部") {
-          filterApis = this.tempApplicationsBox.apis.filter(value => value.category === applicationsBox.categorySelected)
-          this.tempApplicationsBox.apis = filterApis
+        let filterApps = applicationsBox.app.filter(value => value.model === applicationsBox.modelSelected)
+        this.tempApplicationsBox.app = filterApps
+        if(!applicationsBox.typeSelected === "全部") {
+          filterApps = this.tempApplicationsBox.apps.filter(value => value.type === applicationsBox.typeSelected)
+          this.tempApplicationsBox.apps = filterApps
         }
 
       }
     },
-    
-
-
-    
+    async fetchTotalTools(){
+      this.fetchTools()
+      for(let i=0; i<this.applicationsBox.data.ai_works.page.total_pages; i++){
+          // const tempApiUrl = `${import.meta.env.VITE_API}?page=${i}`
+          this.applicationsBox.apps.push()
+        }
+    },
+    async fetchTools(page=1){
+      const apiUrl = `${import.meta.env.VITE_API}?page=${page}`
+      try {
+        const res = await this.axios.get(apiUrl)
+        this.applicationsBox.apps = res.data.ai_works.data
+        this.pagination = res.data.ai_works.page
+        this.showTool(this.applicationsBox)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    changePage(page){
+      this.pagination.current_page = page
+      this.fetchTools(page)
+    }
+  },
+  computed: {
+    searchTools(){
+      const query = this.searchWords
+      return this.tempApplicationsBox.apps.filter(app => app.title.includes(query))
+      
+    }
   },
   created() {
-    this.showTool(this.applicationsBox)
+    this.fetchTools()
+    
   }
 }
 </script>
@@ -352,25 +301,8 @@ export default {
   }
 }
 
-.tool-nav-scrollbar{
-  height: 36px;
-  overflow-y: hidden;
-}
-
-
 .split-line {
   margin: 0.75rem 0 0.25rem;
-}
-
-.pages {
-  justify-content: end;
-}
-
-.page {
-  .page-link {
-    padding: 0.35rem 0.75rem;
-    border-radius: 0.75rem;
-  }
 }
 
 </style>

@@ -144,7 +144,7 @@ body{
 .top-button{
   color: white;
   background: $black;
-  &:hover{
+  &:active{
     background: $black-60;
   }
 }
