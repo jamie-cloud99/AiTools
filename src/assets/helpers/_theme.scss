@@ -70,9 +70,13 @@ body{
     color: #fff;
     transition: all 0.5s;
   }
-  &:hover .page-link{
-    background: $light;
+  &:hover:not(.disabled) .page-link{
+    background: $black-60;
     transition: all 0.5s;
+  }
+
+  &.disabled .page-link{
+    color: $black-40;
   }
 }
 

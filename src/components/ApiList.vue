@@ -138,7 +138,7 @@
           </li>
         </ul>
       </div>
-      <PaginationComponent :pagination="pagination" @change_page="changePage"></PaginationComponent>
+      <PaginationComponent :pagination="tempPagination" @change_page="changePage"></PaginationComponent>
     </div>
   </div>
 </template>
@@ -173,14 +173,24 @@ export default {
       sort: ['由新到舊', '由舊到新'],
       filtersSelected: [],
       isFromNew: true,
-      tempApplicationsBox: {},
+      tempApplicationsBox: {
+        apps: [{
+          title: ''
+        }]
+      },
       applicationsBox: {
         type: ['全部', '問答服務', '虛擬客服', '生活應用', '程式知識', '翻譯助手', '行銷文案'],
         typeSelected: '全部',
         modelSelected: '全部',
         apps: []
       },
-      pagination: { current_page: 1 },
+      pagination: { 
+        current_page: 1, 
+        total_pages: 1, 
+        has_next: true,
+        has_pre: false
+      },
+      tempPagination: {},
       searchWords: ''
     }
   },
@@ -235,44 +245,66 @@ export default {
       this.showTool(this.applicationsBox)
     },
     showTool(applicationsBox){
+      this.tempApplicationsBox.apps = [...applicationsBox.apps]
       // [], [m, c]
-      if(applicationsBox.modelSelected === "全部") {
-        if(applicationsBox.typeSelected === "全部") {
-          this.tempApplicationsBox.apps = [...applicationsBox.apps]
-        } else{
-          let filterApps = applicationsBox.apps.filter(value => value.type === applicationsBox.typeSelected)
-          this.tempApplicationsBox.apps = filterApps
-        }
-      } else {
-        let filterApps = applicationsBox.app.filter(value => value.model === applicationsBox.modelSelected)
-        this.tempApplicationsBox.app = filterApps
-        if(!applicationsBox.typeSelected === "全部") {
-          filterApps = this.tempApplicationsBox.apps.filter(value => value.type === applicationsBox.typeSelected)
-          this.tempApplicationsBox.apps = filterApps
-        }
-
-      }
     },
     async fetchTotalTools(){
-      this.fetchTools()
-      for(let i=0; i<this.applicationsBox.data.ai_works.page.total_pages; i++){
-          // const tempApiUrl = `${import.meta.env.VITE_API}?page=${i}`
-          this.applicationsBox.apps.push()
+      const total_pages = await this.fetchTools()
+      for(let i=1; i<=total_pages; i++){
+          const tempApiUrl = `${import.meta.env.VITE_API}?page=${i}`
+          try {
+            const res = await this.axios.get(tempApiUrl)
+            const apps = res.data.ai_works.data
+            this.applicationsBox.apps.push(...apps)
+          } catch (error) {
+            console.error(error)
+          }
         }
+      this.tempPagination = this.pagination  
     },
     async fetchTools(page=1){
       const apiUrl = `${import.meta.env.VITE_API}?page=${page}`
       try {
         const res = await this.axios.get(apiUrl)
-        this.applicationsBox.apps = res.data.ai_works.data
+        this.tempApplicationsBox.apps = res.data.ai_works.data
         this.pagination = res.data.ai_works.page
-        this.showTool(this.applicationsBox)
+        this.showTool(this.tempApplicationsBox)
+        return res.data.ai_works.page.total_pages
       } catch (error) {
         console.error(error)
       }
     },
+    paginate(apps, perPage=6, curPage=1){
+      const totalPages = Math.ceil(apps.length / perPage)
+
+      if(curPage > totalPages){
+        curPage = totalPages
+      }
+
+      const minData = (curPage - 1) * perPage + 1
+      const maxData = curPage * perPage
+
+
+      const newAry = []
+      apps.forEach((value, i) => {
+        const num = i + 1
+        if(num>=minData && num<=maxData) {
+          newAry.push(value)
+        }
+      });
+
+      const page = {
+        current_page: curPage,
+        total_pages: totalPages,
+        has_next: curPage > 1,
+        has_pre: curPage < totalPages
+      }
+
+      this.tempPagination = page
+    },
+
     changePage(page){
-      this.pagination.current_page = page
+      this.tempPagination.current_page = page
       this.fetchTools(page)
     }
   },
@@ -284,8 +316,7 @@ export default {
     }
   },
   created() {
-    this.fetchTools()
-    
+    this.fetchTotalTools()
   }
 }
 </script>

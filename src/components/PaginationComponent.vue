@@ -2,18 +2,18 @@
   <nav>
     <ul class="d-flex pages">
       <li
-        class="page"
+        class="page me-1"
         v-for="i in pagination.total_pages"
         :key="i"
-        :class="{ active: pagination.current_page === String(i) }"
+        :class="{ active: pagination.current_page === i }"
       >
         <a href="#" class="page-link border-0 fs-sm" @click.prevent="$emit('change_page', i)">
           <span>{{ i }}</span>
         </a>
       </li>
-      <li class="page">
-        <a href="#" class="page-link border-0 fs-sm">
-          <ChevronRightIcon :size="16"></ChevronRightIcon>
+      <li class="page" :class="{ disabled: pagination.current_page === pagination.total_pages }">
+        <a href="#" class="page-link border-0 fs-sm px-2" @click.prevent="$emit('change_page', pagination.current_page+1)">
+          <ChevronRightIcon :size="14"></ChevronRightIcon>
         </a>
       </li>
     </ul>
