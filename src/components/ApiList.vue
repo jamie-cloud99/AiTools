@@ -39,7 +39,7 @@
                   <button
                     type="button"
                     class="dropdown-item"
-                    @click="toggleFilter(item, filter)"
+                    @click="selectFilter(item, filter)"
                     :class="{
                       active: filtersSelected.model === item || filtersSelected.type === item
                     }"
@@ -204,6 +204,7 @@ export default {
           }
         ]
       },
+      appsFiltered: [],
       applicationsBox: {
         type: ['全部', '問答服務', '虛擬客服', '生活應用', '程式知識', '翻譯助手', '行銷文案'],
         typeSelected: '全部',
@@ -223,44 +224,38 @@ export default {
   methods: {
     sortTools(isFromNew) {
       this.isFromNew = isFromNew
-      isFromNew
-        ? this.tempApplicationsBox.apps.sort((a, b) => b.create_time - a.create_time)
-        : this.tempApplicationsBox.apps.sort((a, b) => a.create_time - b.create_time)
+      
+      this.tempApplicationsBox.apps.sort((a, b) =>
+        isFromNew ? b.create_time - a.create_time : a.create_time - b.create_time
+      )
     },
-    toggleFilter(item, filter) {
+    selectFilter(item, filter) {
+      let { modelSelected, typeSelected } = this.applicationsBox
       if (filter.id === 1) {
-        if (item !== this.applicationsBox.modelSelected) {
-          this.applicationsBox.modelSelected = item
-        }
+        if (item !== modelSelected) {
+          modelSelected = item
+        }  
       } else {
         if (item === '所有類型') item = '全部'
-        if (item !== this.applicationsBox.typeSelected) {
-          this.applicationsBox.typeSelected = item
+        if (item !== typeSelected) {
+          typeSelected = item
         }
+        item === '全部'
+          ? (this.filtersSelected.type = '所有類型')
+          : (this.filtersSelected.type = typeSelected)
       }
-      item === '全部'
-        ? (this.filtersSelected.type = '所有類型')
-        : (this.filtersSelected.type = this.applicationsBox.typeSelected)
-      this.filtersSelected.model = this.applicationsBox.modelSelected
+
+      this.filtersSelected.type ||= '所有類型'
+      this.filtersSelected.model = modelSelected
 
       this.filterTools(this.filtersSelected)
     },
     filterTools(filters) {
-      if (filters.model !== '所有模型' && filters.type !== '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.model === filters.model && app.type === filters.type
-        )
-      } else if (filters.model === '所有模型' && filters.type !== '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.type === filters.type
-        )
-      } else if (filters.model !== '所有模型' && filters.type === '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.model === filters.model
-        )
-      } else {
-        this.tempApplicationsBox.apps = [...this.applicationsBox.apps]
-      }
+      this.tempApplicationsBox.apps = this.applicationsBox.apps.filter((app) => {
+        const modelMatch = filters.model === '所有模型' || app.model === filters.model
+        const typeMatch = filters.type === '所有類型' || app.type === filters.type
+        return modelMatch && typeMatch
+      })
       this.paginate(this.tempApplicationsBox.apps)
     },
     async fetchTotalTools() {
