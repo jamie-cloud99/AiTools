@@ -78,6 +78,29 @@ export default{
 .partner-list {
   position: relative;
   text-align: left;
+
+  &::before {
+      content: '';
+      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
+      width: 6rem;
+      height: 8rem;
+      position: absolute;
+      left: -5px;
+      top: 0;
+      z-index: 10;
+    }
+    &::after {
+      content: '';
+      background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
+      width: 6rem;
+      height: 8rem;
+      position: absolute;
+      right: -1px;
+      top: 0;
+      z-index: 10;
+    }
+
+
   @include pad {
     text-align: center;
   }
@@ -85,83 +108,15 @@ export default{
 }
 
 
-.first .partner-list-row{
-  &:first-child{
-    animation: marquee1 10s  linear infinite;
-  }
-  &:last-child{
-    animation: marquee1 13s  linear infinite;
-  }
-}
 
-.second .partner-list-row{
-  &:first-child{
-    animation: marquee2 10s linear infinite;
-  }
-  &:last-child{
-    animation: marquee2 13s linear infinite;
-  }
-}
 
 .partner-list-row{
-  &:first-child{
-
-    &::before {
-      content: '';
-      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
-      width: 6rem;
-      height: 2.5rem;
-      position: absolute;
-      left: -1px;
-    }
-    &::after {
-      content: '';
-      background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
-      width: 6rem;
-      height: 2.5rem;
-      position: absolute;
-      right: -1px;
-    }
-  }
   &:last-child{
-    &::before {
-      content: '';
-      background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0.8), rgba(0,0,0,0));
-      width: 5rem;
-      height: 3rem;
-      position: absolute;
-      left: -1px;
-      bottom: calc(1px + 1.5rem)
-    }
-    &::after {
-      content: '';
-      background: linear-gradient(to left, rgba(0,0,0,1), rgba(0,0,0,0.5), rgba(0,0,0,0.2), rgba(0,0,0,0));
-      width: 5rem;
-      height: 3rem;
-      position: absolute;
-      right: -1px;
-      bottom: calc(1px + 1.5rem)
-    }
+    transform:  translateX(-3rem);
   }
 }
 
-@keyframes marquee1{
-  0% {
-    transform: translateX(100%);
-  }
-  100%{
-    transform: translateX(-100%);
-  }
-}
 
-@keyframes marquee2{
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-200%);
-  }
-}
 
 .partner-logo {
   height: 40px;

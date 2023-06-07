@@ -40,7 +40,9 @@
                     type="button"
                     class="dropdown-item"
                     @click="toggleFilter(item, filter)"
-                    :class="{ active: (filtersSelected.model === item || filtersSelected.type === item) }"
+                    :class="{
+                      active: filtersSelected.model === item || filtersSelected.type === item
+                    }"
                   >
                     {{ item }}
                   </button>
@@ -236,18 +238,26 @@ export default {
           this.applicationsBox.typeSelected = item
         }
       }
-      (item === '全部') ? this.filtersSelected.type = "所有類型" : this.filtersSelected.type = this.applicationsBox.typeSelected
+      item === '全部'
+        ? (this.filtersSelected.type = '所有類型')
+        : (this.filtersSelected.type = this.applicationsBox.typeSelected)
       this.filtersSelected.model = this.applicationsBox.modelSelected
-      
+
       this.filterTools(this.filtersSelected)
     },
-    filterTools(filters){
-      if(filters.model !== "所有模型" && filters.type !== "所有類型") {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(app => (app.model === filters.model && app.type === filters.type))
-      } else if (filters.model === "所有模型" && filters.type !== "所有類型") {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(app => app.type === filters.type)
-      } else if (filters.model !== "所有模型" && filters.type === "所有類型") {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(app => app.model === filters.model)
+    filterTools(filters) {
+      if (filters.model !== '所有模型' && filters.type !== '所有類型') {
+        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
+          (app) => app.model === filters.model && app.type === filters.type
+        )
+      } else if (filters.model === '所有模型' && filters.type !== '所有類型') {
+        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
+          (app) => app.type === filters.type
+        )
+      } else if (filters.model !== '所有模型' && filters.type === '所有類型') {
+        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
+          (app) => app.model === filters.model
+        )
       } else {
         this.tempApplicationsBox.apps = [...this.applicationsBox.apps]
       }
