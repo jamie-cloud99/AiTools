@@ -275,20 +275,22 @@ export default {
 
       this.renderTools()
     },
-    filterTools(filters) {
+    filterTools(filters, query) {
       return this.applicationsBox.apps.filter((app) => {
         const modelMatch = filters.model === '所有模型' || app.model === filters.model
         const typeMatch = filters.type === '所有類型' || app.type === filters.type
-        return modelMatch && typeMatch
+        const queryMatch = app.title.includes(query)
+        return modelMatch && typeMatch && queryMatch
       })
       
     },
     renderTools(page){
-      const appsFiltered = this.filterTools(this.filtersSelected)
+      const appsFiltered = this.filterTools(this.filtersSelected, this.searchWords)
       appsFiltered.sort((a, b) =>
         this.isFromNew ? b.create_time - a.create_time : a.create_time - b.create_time
       )
       this.paginate(appsFiltered, page)
+      return this.tempApplicationsBox.apps
     }
     ,
     paginate(apps, curPage = 1, perPage = 6) {
@@ -323,7 +325,8 @@ export default {
   computed: {
     searchTools() {
       const query = this.searchWords
-      return this.tempApplicationsBox.apps.filter((app) => app.title.includes(query))
+      return this.renderTools().filter((app) => app.title.includes(query))
+      
     }
   },
   created() {
