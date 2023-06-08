@@ -39,7 +39,7 @@
                   <button
                     type="button"
                     class="dropdown-item"
-                    @click="toggleFilter(item, filter)"
+                    @click="selectFilter(item, filter)"
                     :class="{
                       active: filtersSelected.model === item || filtersSelected.type === item
                     }"
@@ -195,7 +195,10 @@ export default {
         }
       ],
       sort: ['由新到舊', '由舊到新'],
-      filtersSelected: {},
+      filtersSelected: {
+        type: '所有類型',
+        model: '所有模型'
+      },
       isFromNew: true,
       tempApplicationsBox: {
         apps: [
@@ -221,48 +224,6 @@ export default {
     }
   },
   methods: {
-    sortTools(isFromNew) {
-      this.isFromNew = isFromNew
-      isFromNew
-        ? this.tempApplicationsBox.apps.sort((a, b) => b.create_time - a.create_time)
-        : this.tempApplicationsBox.apps.sort((a, b) => a.create_time - b.create_time)
-    },
-    toggleFilter(item, filter) {
-      if (filter.id === 1) {
-        if (item !== this.applicationsBox.modelSelected) {
-          this.applicationsBox.modelSelected = item
-        }
-      } else {
-        if (item === '所有類型') item = '全部'
-        if (item !== this.applicationsBox.typeSelected) {
-          this.applicationsBox.typeSelected = item
-        }
-      }
-      item === '全部'
-        ? (this.filtersSelected.type = '所有類型')
-        : (this.filtersSelected.type = this.applicationsBox.typeSelected)
-      this.filtersSelected.model = this.applicationsBox.modelSelected
-
-      this.filterTools(this.filtersSelected)
-    },
-    filterTools(filters) {
-      if (filters.model !== '所有模型' && filters.type !== '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.model === filters.model && app.type === filters.type
-        )
-      } else if (filters.model === '所有模型' && filters.type !== '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.type === filters.type
-        )
-      } else if (filters.model !== '所有模型' && filters.type === '所有類型') {
-        this.tempApplicationsBox.apps = this.applicationsBox.apps.filter(
-          (app) => app.model === filters.model
-        )
-      } else {
-        this.tempApplicationsBox.apps = [...this.applicationsBox.apps]
-      }
-      this.paginate(this.tempApplicationsBox.apps)
-    },
     async fetchTotalTools() {
       const total_pages = await this.fetchTools()
       for (let i = 1; i <= total_pages; i++) {
@@ -271,6 +232,7 @@ export default {
           const res = await this.axios.get(tempApiUrl)
           const apps = res.data.ai_works.data
           this.applicationsBox.apps.push(...apps)
+          this.renderTools()
         } catch (error) {
           console.error(error)
         }
@@ -289,23 +251,58 @@ export default {
         console.error(error)
       }
     },
-    paginate(apps, perPage = 6, curPage = 1) {
+    sortTools(isFromNew) {
+      this.isFromNew = isFromNew
+      this.renderTools()
+    },
+    selectFilter(item, filter) {
+      let { modelSelected, typeSelected } = this.applicationsBox
+      if (filter.id === 1) {
+        if (item !== modelSelected) {
+          modelSelected = item
+        }  
+      } else {
+        if (item === '所有類型') item = '全部'
+        if (item !== typeSelected) {
+          typeSelected = item
+        }
+        item === '全部'
+          ? (this.filtersSelected.type = '所有類型')
+          : (this.filtersSelected.type = typeSelected)
+      }
+      this.filtersSelected.type ||= '所有類型'
+      this.filtersSelected.model = modelSelected
+
+      this.renderTools()
+    },
+    filterTools(filters) {
+      return this.applicationsBox.apps.filter((app) => {
+        const modelMatch = filters.model === '所有模型' || app.model === filters.model
+        const typeMatch = filters.type === '所有類型' || app.type === filters.type
+        return modelMatch && typeMatch
+      })
+      
+    },
+    renderTools(page){
+      const appsFiltered = this.filterTools(this.filtersSelected)
+      appsFiltered.sort((a, b) =>
+        this.isFromNew ? b.create_time - a.create_time : a.create_time - b.create_time
+      )
+      this.paginate(appsFiltered, page)
+    }
+    ,
+    paginate(apps, curPage = 1, perPage = 6) {
+
       const totalPages = Math.ceil(apps.length / perPage)
 
       if (curPage > totalPages) {
         curPage = totalPages
       }
 
-      const minData = (curPage - 1) * perPage + 1
+      const minData = (curPage - 1) * perPage
       const maxData = curPage * perPage
 
-      const newAry = []
-      apps.forEach((value, i) => {
-        const num = i + 1
-        if (num >= minData && num <= maxData) {
-          newAry.push(value)
-        }
-      })
+      const appsPaginated = apps.slice(minData, maxData)
 
       const page = {
         current_page: curPage,
@@ -315,11 +312,12 @@ export default {
       }
 
       this.tempPagination = page
+      this.tempApplicationsBox.apps = appsPaginated
     },
 
     changePage(page) {
       this.tempPagination.current_page = page
-      this.fetchTools(page)
+      this.renderTools(page)
     }
   },
   computed: {
