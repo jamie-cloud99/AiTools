@@ -256,22 +256,22 @@ export default {
       this.renderTools()
     },
     selectFilter(item, filter) {
-      let { modelSelected, typeSelected } = this.applicationsBox
       if (filter.id === 1) {
-        if (item !== modelSelected) {
-          modelSelected = item
+        if (item !== this.applicationsBox.modelSelected) {
+          this.applicationsBox.modelSelected = item
+          
         }  
       } else {
         if (item === '所有類型') item = '全部'
-        if (item !== typeSelected) {
-          typeSelected = item
+        if (item !== this.applicationsBox.typeSelected) {
+          this.applicationsBox.typeSelected = item
         }
         item === '全部'
           ? (this.filtersSelected.type = '所有類型')
-          : (this.filtersSelected.type = typeSelected)
+          : (this.filtersSelected.type = this.applicationsBox.typeSelected)
       }
       this.filtersSelected.type ||= '所有類型'
-      this.filtersSelected.model = modelSelected
+      this.filtersSelected.model = this.applicationsBox.modelSelected
 
       this.renderTools()
     },
